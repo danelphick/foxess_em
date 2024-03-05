@@ -78,7 +78,10 @@ class BatteryManagerFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         self._inverter_connection_schema = vol.Schema(
             {
-                vol.Required(CONNECTION_TYPE, default=FOX_MODBUS_TCP): sel(
+                vol.Required(
+                    CONNECTION_TYPE,
+                    default=self._data.get(CONNECTION_TYPE, FOX_MODBUS_TCP),
+                ): sel(
                     {
                         "select": {
                             "options": [FOX_MODBUS_TCP, FOX_MODBUS_SERIAL, FOX_CLOUD]
@@ -96,11 +99,11 @@ class BatteryManagerFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 ): cv.string,
                 vol.Required(
                     FOX_MODBUS_PORT,
-                    default=502,
+                    default=self._data.get(FOX_MODBUS_PORT, 502),
                 ): int,
                 vol.Required(
                     FOX_MODBUS_SLAVE,
-                    default=247,
+                    default=self._data.get(FOX_MODBUS_SLAVE, 247),
                 ): int,
             }
         )
